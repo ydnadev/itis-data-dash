@@ -1,10 +1,10 @@
 # ITIS Data Dash
 
-Simple dashboard of taxonomic data sourced from ITIS[[1]].
+Simple dashboard of taxonomic data sourced from ITIS [[1]](#1).
 
 ## Usage
 
-*Note - ITIS database does not exist in this repository, download ITIS data from source below. * 
+*Note - ITIS database does not exist in this repository, download ITIS data from source below.* 
 
 Extract data from ITIS SQLite db  
     - run SQL script 1 to dump data for all species to *animal_species.txt*  
