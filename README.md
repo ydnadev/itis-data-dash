@@ -7,12 +7,12 @@ Simple dashboard of taxonomic data sourced from ITIS [[1]](#1).
 *Note - ITIS database does not exist in this repository, download ITIS data from source below.* 
 
 Extract data from ITIS SQLite db  
-    - run SQL script 1 to dump data for all species to *animal_species.txt*  
-    - run SQL script 2 to dump data for all taxa hierarchy to *animal_taxa.csv*  
+    - run src/script1.sql to dump data for all species to *animal_species.txt*  
+    - run rc/script2.sql to dump data for all taxa hierarchy to *animal_taxa.csv*  
 
 Parsing assumes 2 files above- 
 ```bash
-perl itis_parser.pl 
+perl src/itis_parser.pl 
 ```
 
 Dashboard -
