@@ -10,7 +10,7 @@ st.set_page_config(
 pd.set_option('display.max_rows',None)
 
 # Main app
-st.header('ITIS Taxa Lookup')
+st.header('ITIS Taxa Lookup - Animals')
 st.write('Data from Integrated Taxonomic Information System (ITIS) - https://www.itis.gov/')
 st.write('data load date: 30-Mar-2023')
 
