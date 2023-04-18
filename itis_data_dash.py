@@ -9,18 +9,35 @@ st.set_page_config(
 )
 pd.set_option('display.max_rows',None)
 
-# Get data from parquet file
-def get_data() -> pd.DataFrame:
-    return pd.read_parquet('data/itis.parquet')
-df = get_data()
-
 # Main app
 st.header('ITIS Taxa Lookup')
 st.write('Data from Integrated Taxonomic Information System (ITIS) - https://www.itis.gov/')
 st.write('data load date: 30-Mar-2023')
 
+# Get data from parquet file
+def get_data() -> pd.DataFrame:
+    return pd.read_parquet('data/itis_vernacular.parquet')
+cn = get_data()
+
+## Search by Common name
+#cn_filter = st.text_input('Common name')
+#cn_filter = cn_filter.title()
+st.write('To edit- click in box, use :green[backspace] to delete, then type or paste...')
+cn_filter = st.selectbox('Select/Type the Common Name to Search Species', pd.unique(cn['vernacular_name']))
+placeholder1 = st.empty()
+cn = cn[cn['vernacular_name'] == cn_filter]
+cn = cn.sort_values(by=['complete_name'])
+st.table(cn)
+
+# Get data from parquet file
+def get_data() -> pd.DataFrame:
+    return pd.read_parquet('data/itis.parquet')
+df = get_data()
+
+st.markdown("""---""")
+
 ## Search by Genus
-sp_filter = st.text_input('Genus')
+sp_filter = st.text_input('Type the Genus to Search')
 sp_filter = sp_filter.title()
 placeholder = st.empty()
 df = df[df['unit_name1'] == sp_filter]
