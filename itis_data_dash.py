@@ -33,7 +33,7 @@ df_return['vernacular_name_upper'] = df_return['vernacular_name'].str.upper()
 df_return = df_return.sort_values(by=['vernacular_name_upper'])
 del df_return['vernacular_name_upper']
 if text_search:
-    st.dataframe(df_return)
+    st.dataframe(df_return,use_container_width=True)
     #<--
 
 # Get data from parquet file for species data
