@@ -56,7 +56,7 @@ df1 = df2[['complete_name','name_usage','subkingdom','phylum','subphylum','super
 def color_vald(val):
     color = 'blue' if val == 'valid' or val == 'accepted' else ''
     return f'background-color: {color}'
-st.dataframe(df1.style.applymap(color_vald, subset=['name_usage']), use_container_width=False)
+st.dataframe(df1.style.applymap(color_vald, subset=['name_usage']), use_container_width=True)
 
 
 ## Download CSV button
