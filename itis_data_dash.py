@@ -10,7 +10,7 @@ st.set_page_config(
 pd.set_option('display.max_rows',None)
 
 # Main app
-st.header('ITIS Taxa Lookup - Animals')
+st.header('ITIS Taxa Lookup')
 st.write('Data from Integrated Taxonomic Information System (ITIS) - https://www.itis.gov/')
 st.write('data load date: 30-Mar-2023')
 
@@ -46,7 +46,7 @@ df = df.sort_values(by=['complete_name'])
 ## Dataframe based on Genus
 df1 = df[['complete_name','name_usage','subkingdom','phylum','subphylum','superclass','class','subclass','infraclass','superorder','order','suborder','infraorder','section','subsection','superfamily','family','subfamily','tribe','subtribe','unaccept_reason']]
 def color_vald(val):
-    color = 'blue' if val == 'valid' else ''
+    color = 'blue' if val == 'valid' or val == 'accepted' else ''
     return f'background-color: {color}'
 st.dataframe(df1.style.applymap(color_vald, subset=['name_usage']), use_container_width=True)
 

@@ -3,21 +3,21 @@
 #use warnings;
 use strict;
 
-my $animals = "../itisdata/animal_species.txt";
-my $taxa = "../itisdata/animal_taxa.csv";
-my $outfile = "../itisdata/animals_phyla_temp.txt";
-my $outfile2 = "../itisdata/animals_phyla.txt";
+my $species = "../itisdata/species.txt";
+my $taxa = "../itisdata/taxa.csv";
+my $outfile = "../itisdata/species_temp.txt";
+my $outfile2 = "../itisdata/species_taxa.txt";
 my $lcp = 0;
 my %pars;
 my %tax;
 my @d;
 
-# read tab separated animal_species.txt from ITIS
-open (A, "<$animals") || print "can\'nt open animals\n";
-my @data_animals = <A>;
+# read tab separated species.txt from ITIS
+open (A, "<$species") || print "can\'nt open species\n";
+my @data_species = <A>;
 close A;
 
-# read csv separated animal_taxa.txt from ITIS
+# read csv separated species_taxa.txt from ITIS
 open (T, "<$taxa") || print "can\'nt open taxa\n";
 my @data_taxa = <T>;
 close T;
@@ -36,10 +36,10 @@ for $_(@data_taxa){
     }
 }
 
-# parse animal data for parental tsn
+# parse species data for parental tsn
 # crawl hierarchy 
 # create temporary file with "|" delimited column of hierarchy
-for $_(@data_animals){
+for $_(@data_species){
     my $line = $_;
     chomp $line;
     my $tsn = 0;
@@ -47,9 +47,10 @@ for $_(@data_animals){
     my $tsnp = $df[17];
     my $valid = $df[10];
     my $tsn = $df[0];
+    my $rank_id = $df[21];
     my $species = $df[25];
     my $t = $species."-220";
-    while($tsn != '202423' && $tsn != '' && $valid eq 'valid'){
+    while($rank_id != '10' && $tsn != '' && ($valid eq 'accepted' or $valid eq 'valid')){
         print "$tsn,$tsnp ==>";
         print "$tax{$tsn},$tax{$tsnp}\n";
         $t .= "|".$tax{$tsn}."|".$tax{$tsnp};
@@ -60,7 +61,7 @@ for $_(@data_animals){
     push(@d,$line);
 }
 
-# write temporary file with the hierarchy for each animal line
+# write temporary file with the hierarchy for each species line
 open (OUT,">>$outfile") || print "can\'t open $outfile\n";
 for $_(@d){
     print OUT $_."\n";
