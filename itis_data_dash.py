@@ -91,4 +91,6 @@ if link_tsn:
     itis_link = 'https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=' + link_tsn + ''
     st.write(itis_link)
 
+st.markdown('''---''')
+
 st.write('Github - https://github.com/ydnadev/itis-data-dash')
