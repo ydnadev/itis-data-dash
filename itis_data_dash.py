@@ -9,6 +9,10 @@ st.set_page_config(
 )
 pd.set_option('display.max_rows',None)
 
+#CSV convert def
+def convert_df(df):
+    return df.to_csv().encode('utf-8')
+
 # Main app
 st.header('ITIS Taxa Lookup')
 st.write('Data from Integrated Taxonomic Information System (ITIS) - https://www.itis.gov/')
@@ -18,6 +22,12 @@ st.write('data load date: :blue[30-Mar-2023]')
 def get_data() -> pd.DataFrame:
     return pd.read_parquet('data/itis_vernacular.parquet')
 cn = get_data()
+
+# Get data from parquet file for species data
+def get_data() -> pd.DataFrame:
+    return pd.read_parquet('data/itis.parquet')
+df = get_data()
+
 
 ## Search by Common name
 # free search box, return sci and vern names sorted by vern name
@@ -36,10 +46,14 @@ if text_search:
     st.dataframe(df_return,use_container_width=True)
     #<--
 
-# Get data from parquet file for species data
-def get_data() -> pd.DataFrame:
-    return pd.read_parquet('data/itis.parquet')
-df = get_data()
+    ## Download CSV button
+    csv = convert_df(df_return)
+    st.download_button(
+        label="Download data as CSV",
+        data=csv,
+        file_name = 'itis_vernacular-' + text_search + '.csv',
+        mime='text/csv',
+    )
 
 st.markdown('''---''')
 
@@ -56,19 +70,17 @@ df1 = df2[['tsn','complete_name','name_usage','subkingdom','phylum','subphylum',
 def color_vald(val):
     color = 'blue' if val == 'valid' or val == 'accepted' else ''
     return f'background-color: {color}'
-st.dataframe(df1.style.applymap(color_vald, subset=['name_usage']), use_container_width=True)
+if ge_search:
+    st.dataframe(df1.style.applymap(color_vald, subset=['name_usage']), use_container_width=True)
 
-
-## Download CSV button
-def convert_df(df):
-    return df.to_csv().encode('utf-8')
-csv = convert_df(df1)
-st.download_button(
-    label="Download data as CSV",
-    data=csv,
-    file_name = ge_search + '_itis_data.csv',
-    mime='text/csv',
-)
+    ## Download CSV button
+    csv2 = convert_df(df1)
+    st.download_button(
+        label="Download data as CSV",
+        data=csv2,
+        file_name = 'itis_data-' + ge_search + '.csv',
+        mime='text/csv',
+    )
 
 st.markdown('''---''')
 
