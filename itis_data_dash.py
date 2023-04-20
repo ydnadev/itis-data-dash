@@ -27,9 +27,10 @@ search_sp = cn['complete_name'].str.contains(text_search, case=False)
 search_cn = cn['vernacular_name'].str.contains(text_search, case=False)
 df_search = cn[search_sp | search_cn]
 #df_search['scientific_name'] = df_search['complete_name']
-df_return = df_search[['complete_name','vernacular_name']]
+df_return = df_search[['tsn','complete_name','vernacular_name']]
 df_return['vernacular_name_upper'] = df_return['vernacular_name'].str.upper()
 df_return = df_return.sort_values(by=['vernacular_name_upper'])
+df_return['tsn'] = df_return['tsn'].astype(str)
 del df_return['vernacular_name_upper']
 if text_search:
     st.dataframe(df_return,use_container_width=True)
@@ -51,7 +52,7 @@ search_ge = df[df['unit_name1'] == ge_search]
 df2 = search_ge.sort_values(by=['complete_name'])
 
 ## Dataframe based on Genus
-df1 = df2[['complete_name','name_usage','subkingdom','phylum','subphylum','superclass','class','subclass','infraclass','superorder','order','suborder','infraorder','section','subsection','superfamily','family','subfamily','tribe','subtribe','unaccept_reason']]
+df1 = df2[['tsn','complete_name','name_usage','subkingdom','phylum','subphylum','superclass','class','subclass','infraclass','superorder','order','suborder','infraorder','section','subsection','superfamily','family','subfamily','tribe','subtribe']]
 def color_vald(val):
     color = 'blue' if val == 'valid' or val == 'accepted' else ''
     return f'background-color: {color}'
@@ -69,3 +70,11 @@ st.download_button(
     mime='text/csv',
 )
 
+st.markdown('''---''')
+
+## ITIS link
+link_tsn = st.text_input('Enter TSN from above to get hyperlink to ITIS', value = '')
+
+if link_tsn:
+    itis_link = "https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=" + link_tsn + ""
+    st.write(itis_link)

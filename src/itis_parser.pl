@@ -13,12 +13,12 @@ my %tax;
 my @d;
 
 # read tab separated species.txt from ITIS
-open (A, "<$species") || print "can\'nt open species\n";
+open (A, "<$species") || print "can\'t open species\n";
 my @data_species = <A>;
 close A;
 
 # read csv separated species_taxa.txt from ITIS
-open (T, "<$taxa") || print "can\'nt open taxa\n";
+open (T, "<$taxa") || print "can\'t open taxa\n";
 my @data_taxa = <T>;
 close T;
 
