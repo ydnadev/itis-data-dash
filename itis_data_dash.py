@@ -1,7 +1,6 @@
 import pandas as pd
 import pyarrow.parquet as pq
 import streamlit as st
-import numpy as np
 
 # Streamlit config
 st.set_page_config(
