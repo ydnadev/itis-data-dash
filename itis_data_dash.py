@@ -49,7 +49,7 @@ if text_search:
     ## Download CSV button
     csv = convert_df(df_return)
     st.download_button(
-        label="Download data as CSV",
+        label='Download data as CSV',
         data=csv,
         file_name = 'itis_vernacular-' + text_search + '.csv',
         mime='text/csv',
@@ -76,7 +76,7 @@ if ge_search:
     ## Download CSV button
     csv2 = convert_df(df1)
     st.download_button(
-        label="Download data as CSV",
+        label='Download data as CSV',
         data=csv2,
         file_name = 'itis_data-' + ge_search + '.csv',
         mime='text/csv',
@@ -88,5 +88,7 @@ st.markdown('''---''')
 link_tsn = st.text_input('Enter TSN from above to get hyperlink to ITIS', value = '')
 
 if link_tsn:
-    itis_link = "https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=" + link_tsn + ""
+    itis_link = 'https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=' + link_tsn + ''
     st.write(itis_link)
+
+st.write('Github - https://github.com/ydnadev/itis-data-dash')
