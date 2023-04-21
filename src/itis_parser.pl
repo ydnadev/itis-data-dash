@@ -72,9 +72,9 @@ close OUT;
 # capture hierarchy for each species as columns and print to file
 open (IN,"<$outfile") || print "can\'t open $outfile\n";
 open (OUT2,">>$outfile2") || print "can\'t open $outfile2\n";
-print OUT2 "tsn\tunit_ind1\tunit_name1\tunit_ind2\tunit_name2\tunit_ind3\tunit_name3\tunit_ind4\tunit_name4\tunnamed_taxon_ind\tname_usage\tunaccept_reason\tcredibility_rtng\tcompleteness_rtng\tcurrency_rating\tphylo_sort_seq\tinitial_time_stamp\tparent_tsn\ttaxon_author_id\thybrid_author_id\tkingdom_id\trank_id\tupdate_date\tuncertain_prnt_ind\tn_usage\tcomplete_name\tsubkingdom\tphylum\tsubphylum\tsuperclass\tclass\tsubclass\tinfraclass\tsuperorder\torder\tsuborder\tinfraorder\tsection\tsubsection\tsuperfamily\tfamily\tsubfamily\ttribe\tsubtribe\n";
+print OUT2 "tsn\tunit_ind1\tunit_name1\tunit_ind2\tunit_name2\tunit_ind3\tunit_name3\tunit_ind4\tunit_name4\tunnamed_taxon_ind\tname_usage\tunaccept_reason\tcredibility_rtng\tcompleteness_rtng\tcurrency_rating\tphylo_sort_seq\tinitial_time_stamp\tparent_tsn\ttaxon_author_id\thybrid_author_id\tkingdom_id\trank_id\tupdate_date\tuncertain_prnt_ind\tn_usage\tcomplete_name\tkingdom\tsubkingdom\tphylum\tsubphylum\tsuperclass\tclass\tsubclass\tinfraclass\tsuperorder\torder\tsuborder\tinfraorder\tsection\tsubsection\tsuperfamily\tfamily\tsubfamily\ttribe\tsubtribe\n";
 for $_(<IN>){
-    my ($a1,$subking,$phylum,$subphylum,$superclass,$class,$subclass,$infraclass,$superorder,$order,$suborder,$infraorder,$section,$subsection,$superfamily,$family,$subfamily,$tribe,$subtribe,$genus,$species,$subspecies) = "";
+    my ($a1,$kingdom,$subking,$phylum,$subphylum,$superclass,$class,$subclass,$infraclass,$superorder,$order,$suborder,$infraorder,$section,$subsection,$superfamily,$family,$subfamily,$tribe,$subtribe,$genus,$species,$subspecies) = "";
     my $line = $_;
     chomp $line;
 
@@ -87,7 +87,10 @@ for $_(<IN>){
     for $_(@info){
         my $val = $_;
         chomp $val;
-        if($val =~ m/(.*)-20$/){
+        if($val =~ m/(.*)-10$/){
+            $kingdom = $1;
+        }
+        elsif($val =~ m/(.*)-20$/){
             $subking = $1;
         }
         elsif($val =~ m/(.*)-30$/){
@@ -146,7 +149,7 @@ for $_(<IN>){
     my $i;
     
     unless($a1 =~ m/tsn/){
-        print OUT2 $a1."$subking\t$phylum\t$subphylum\t$superclass\t$class\t$subclass\t$infraclass\t$superorder\t$order\t$suborder\t$infraorder\t$section\t$subsection\t$superfamily\t$family\t$subfamily\t$tribe\t$subtribe\n";
+        print OUT2 $a1."$kingdom\t$subking\t$phylum\t$subphylum\t$superclass\t$class\t$subclass\t$infraclass\t$superorder\t$order\t$suborder\t$infraorder\t$section\t$subsection\t$superfamily\t$family\t$subfamily\t$tribe\t$subtribe\n";
     }
 }
 close IN;

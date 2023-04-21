@@ -66,7 +66,7 @@ search_ge = df[df['unit_name1'] == ge_search]
 df2 = search_ge.sort_values(by=['complete_name'])
 
 ## Dataframe based on Genus
-df1 = df2[['tsn','complete_name','name_usage','subkingdom','phylum','subphylum','superclass','class','subclass','infraclass','superorder','order','suborder','infraorder','section','subsection','superfamily','family','subfamily','tribe','subtribe']]
+df1 = df2[['tsn','name_usage','complete_name','subfamily','family','superfamily','suborder','order','superorder','class','subphylum','phylum','subkingdom','kingdom']]
 def color_vald(val):
     color = 'blue' if val == 'valid' or val == 'accepted' else ''
     return f'background-color: {color}'
