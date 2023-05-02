@@ -68,7 +68,7 @@ df2 = search_ge.sort_values(by=['complete_name'])
 ## Dataframe based on Genus
 df1 = df2[['tsn','name_usage','complete_name','subfamily','family','superfamily','suborder','order','superorder','class','subphylum','phylum','subkingdom','kingdom']]
 def color_vald(val):
-    color = 'blue' if val == 'valid' or val == 'accepted' else ''
+    color = 'green' if val == 'valid' or val == 'accepted' else ''
     return f'background-color: {color}'
 if ge_search:
     st.dataframe(df1.style.applymap(color_vald, subset=['name_usage']), use_container_width=True)
