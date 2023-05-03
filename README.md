@@ -8,8 +8,8 @@ Dashboard: https://ydnadev-itis-data-dash-itis-data-dash-mmsio8.streamlit.app/
 *Note - ITIS database does not exist in this repository, download ITIS data from source below.* 
 
 Extract data from ITIS SQLite db  
-    - run src/script1.sql to dump data for all species to *itisdata/animal_species.txt*  
-    - run rc/script2.sql to dump data for all taxa hierarchy to *itisdata/animal_taxa.csv*  
+    - run src/script1.sql to dump data for all species as tsv to *itisdata/species.txt*  
+    - run src/script2.sql to dump data for all taxa hierarchy as csv to *itisdata/taxa.csv*  
 
 Parsing assumes 2 files above- 
 ```bash

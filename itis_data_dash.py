@@ -16,7 +16,7 @@ def convert_df(df):
 # Main app
 st.header('ITIS Taxa Lookup')
 st.write('Data from Integrated Taxonomic Information System (ITIS) - https://www.itis.gov/')
-st.write('data load date: :blue[30-Mar-2023]')
+st.write('data load date: :blue[26-Apr-2023]')
 
 # Get data from parquet file for vernacular names
 def get_data() -> pd.DataFrame:

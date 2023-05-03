@@ -1,6 +1,6 @@
 /* export all animal taxa */
 select tu.tsn
-    ,tu.uni_name1
+    ,tu.unit_name1
     ,tu.parent_tsn
     ,tu.rank_id
 from taxonomic_units tu
