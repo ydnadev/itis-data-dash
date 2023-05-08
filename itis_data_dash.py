@@ -32,7 +32,7 @@ df = get_data()
 ## Search by Common name
 # free search box, return sci and vern names sorted by vern name
 st.write(':orange[Note: Scientific name =  complete_name, Common name = vernacular_name]') 
-text_search = st.text_input('Find species by name:', value = '')
+text_search = st.text_input('Find species by name (e.g. polar bear or *Ursus maritimus*):', value = '')
 search_sp = cn['complete_name'].str.contains(text_search, case=False)
 search_cn = cn['vernacular_name'].str.contains(text_search, case=False)
 df_search = cn[search_sp | search_cn]
@@ -57,8 +57,31 @@ if text_search:
 
 st.markdown('''---''')
 
+## Search by Species
+species_search = st.text_input('Species search (e.g. *Ursus maritimus*)', value = '')
+try:
+    species_search = species_search.upper()
+    print(species_search)
+    search_species = df[df['complete_name'].str.upper() == species_search]
+    if not search_species['tsn'].isnull().values.any():
+        itis_link = 'https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=' + search_species['tsn'].values[0].astype(str) + ''
+        st.write(search_species['name_usage'].values[0] + ' -- ' + itis_link)
+        #itis_link = search_species['tsn'].values[0].astype(str)
+    if not search_species['kingdom'].isnull().values.any():
+        st.write('KINGDOM - ' + search_species['kingdom'].values[0])
+        st.write('---- PHYLUM - ' + search_species['phylum'].values[0])
+        st.write('---- ---- CLASS - ' + search_species['class'].values[0])
+        st.write('---- ---- ---- ORDER - ' + search_species['order'].values[0])
+        st.write('---- ---- ---- ---- FAMILY - ' + search_species['family'].values[0])
+except:
+    st.write('please try again')
+
+st.markdown('''---''')
+
+
+
 ## Search by Genus
-ge_search = st.text_input('Enter Genus', value = '')
+ge_search = st.text_input('Enter Genus (e.g. *Ursus*)', value = '')
 ge_search = ge_search.title()
 placeholder = st.empty()
 search_ge = df[df['unit_name1'] == ge_search]
@@ -81,15 +104,6 @@ if ge_search:
         file_name = 'itis_data-' + ge_search + '.csv',
         mime='text/csv',
     )
-
-st.markdown('''---''')
-
-## ITIS link
-link_tsn = st.text_input('Enter TSN from above to get hyperlink to ITIS', value = '')
-
-if link_tsn:
-    itis_link = 'https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=' + link_tsn + ''
-    st.write(itis_link)
 
 st.markdown('''---''')
 
