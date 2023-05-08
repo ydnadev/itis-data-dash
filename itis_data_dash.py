@@ -1,9 +1,7 @@
 import pandas as pd
-import numpy as np
 import pyarrow.parquet as pq
 import streamlit as st
 import plotly.graph_objects as go
-import plotly.express as px
 
 # Streamlit config
 st.set_page_config(
