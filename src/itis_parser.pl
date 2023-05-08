@@ -4,35 +4,61 @@
 use strict;
 
 my $species = "../itisdata/species.txt";
-my $taxa = "../itisdata/taxa.csv";
-my $outfile = "../itisdata/species_temp.txt";
-my $outfile2 = "../itisdata/species_taxa.txt";
+my $species_sub = "../itisdata/subspecies.txt";
+my $taxa = "../itisdata/taxa-species.csv";
+my $taxa_sub = "../itisdata/taxa-subspecies.csv";
+my $outfile_temp = "../itisdata/species_temp.txt";
+my $outfile = "../itisdata/species_taxa.txt";
 my $lcp = 0;
 my %pars;
+my %pars_sub;
 my %tax;
+my %tax_sub;
 my @d;
 
 # read tab separated species.txt from ITIS
-open (A, "<$species") || print "can\'t open species\n";
-my @data_species = <A>;
-close A;
+open (SP, "<$species") || print "can\'t open species\n";
+my @data_species = <SP>;
+close SP;
 
-# read csv separated species_taxa.txt from ITIS
-open (T, "<$taxa") || print "can\'t open taxa\n";
-my @data_taxa = <T>;
-close T;
+# read tab separated subspecies.txt from ITIS
+open (SUB, "<$species_sub") || print "can\'t open subspecies\n";
+my @data_subspecies = <SUB>;
+close SUB;
 
-# parse taxa data for taxa hiearchy
+# read csv separated taxa.csv from ITIS
+open (TSP, "<$taxa") || print "can\'t open taxa\n";
+my @data_taxa = <TSP>;
+close TSP;
+
+# read csv separated taxa-subspecies.csv from ITIS
+open (TSUB, "<$taxa_sub") || print "can\'t open taxa subspecies\n";
+my @data_taxasub = <TSUB>;
+close TSUB;
+
+# parse taxa data for taxa hiearchy of species
 for $_(@data_taxa){
     my $line = $_;
     chomp $line;
-
     my @vals = split(',', $line);
     $pars{$vals[0]} = 0;
     $tax{$vals[0]} = 0;
     if($vals[2] =~ m/[0-9]+/){
         $pars{$vals[0]} = $vals[2];
         $tax{$vals[0]} = $vals[1]."-".$vals[3];
+    }
+}
+
+# parse taxa data for taxa hiearchy of subspecies
+for $_(@data_taxasub){
+    my $line = $_;
+    chomp $line;
+    my @vals = split(',', $line);
+    $pars_sub{$vals[0]} = 0;
+    $tax_sub{$vals[0]} = 0;
+    if($vals[2] =~ m/[0-9]+/){
+        $pars_sub{$vals[0]} = $vals[2];
+        $tax_sub{$vals[0]} = $vals[1]."-".$vals[3];
     }
 }
 
@@ -61,8 +87,33 @@ for $_(@data_species){
     push(@d,$line);
 }
 
+# parse subspecies data for parental tsn
+# crawl hierarchy 
+# create temporary file with "|" delimited column of hierarchy
+for $_(@data_subspecies){
+    my $line = $_;
+    chomp $line;
+    my $tsn = 0;
+    my @df = split('\t', $line);
+    my $tsnp = $df[17];
+    my $valid = $df[10];
+    my $tsn = $df[0];
+    my $rank_id = $df[21];
+    my $species = $df[25];
+    my $t = $species."-230";
+    while($rank_id != '10' && $tsn != '' && ($valid eq 'accepted' or $valid eq 'valid')){
+        print "$tsn,$tsnp ==>";
+        print "$tax_sub{$tsn},$tax_sub{$tsnp}\n";
+        $t .= "|".$tax_sub{$tsn}."|".$tax_sub{$tsnp};
+        $tsn = $pars_sub{$tsnp};
+        $tsnp = $pars_sub{$tsn};
+    }
+    $line .= "\t".$t;
+    push(@d,$line);
+}
+
 # write temporary file with the hierarchy for each species line
-open (OUT,">>$outfile") || print "can\'t open $outfile\n";
+open (OUT,">>$outfile_temp") || print "can\'t open $outfile_temp\n";
 for $_(@d){
     print OUT $_."\n";
 }
@@ -70,8 +121,8 @@ close OUT;
 
 # using temporary file from above, crawl hierarchy hash until kingdom reached
 # capture hierarchy for each species as columns and print to file
-open (IN,"<$outfile") || print "can\'t open $outfile\n";
-open (OUT2,">>$outfile2") || print "can\'t open $outfile2\n";
+open (IN,"<$outfile_temp") || print "can\'t open $outfile_temp\n";
+open (OUT2,">>$outfile") || print "can\'t open $outfile\n";
 print OUT2 "tsn\tunit_ind1\tunit_name1\tunit_ind2\tunit_name2\tunit_ind3\tunit_name3\tunit_ind4\tunit_name4\tunnamed_taxon_ind\tname_usage\tunaccept_reason\tcredibility_rtng\tcompleteness_rtng\tcurrency_rating\tphylo_sort_seq\tinitial_time_stamp\tparent_tsn\ttaxon_author_id\thybrid_author_id\tkingdom_id\trank_id\tupdate_date\tuncertain_prnt_ind\tn_usage\tcomplete_name\tkingdom\tsubkingdom\tphylum\tsubphylum\tsuperclass\tclass\tsubclass\tinfraclass\tsuperorder\torder\tsuborder\tinfraorder\tsection\tsubsection\tsuperfamily\tfamily\tsubfamily\ttribe\tsubtribe\n";
 for $_(<IN>){
     my ($a1,$kingdom,$subking,$phylum,$subphylum,$superclass,$class,$subclass,$infraclass,$superorder,$order,$suborder,$infraorder,$section,$subsection,$superfamily,$family,$subfamily,$tribe,$subtribe,$genus,$species,$subspecies) = "";
