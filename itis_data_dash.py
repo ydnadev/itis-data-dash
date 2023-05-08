@@ -69,10 +69,26 @@ try:
         #itis_link = search_species['tsn'].values[0].astype(str)
     if not search_species['kingdom'].isnull().values.any():
         st.write('KINGDOM - ' + search_species['kingdom'].values[0])
+    if not search_species['subkingdom'].isnull().values.any():
+        st.write('SUBKINGDOM - ' + search_species['subkingdom'].values[0])
+    if not search_species['phylum'].isnull().values.any():
         st.write('----- PHYLUM - ' + search_species['phylum'].values[0])
+    if not search_species['subphylum'].isnull().values.any():
+        st.write('----- SUBPHYLUM - ' + search_species['subphylum'].values[0])
+    if not search_species['class'].isnull().values.any():
         st.write('----- ----- CLASS - ' + search_species['class'].values[0])
+    if not search_species['superorder'].isnull().values.any():
+        st.write('----- ----- ----- SUPERORDER - ' + search_species['superorder'].values[0])
+    if not search_species['order'].isnull().values.any():
         st.write('----- ----- ----- ORDER - ' + search_species['order'].values[0])
+    if not search_species['suborder'].isnull().values.any():
+        st.write('----- ----- ----- SUBORDER - ' + search_species['suborder'].values[0])
+    if not search_species['superfamily'].isnull().values.any():
+        st.write('----- ----- ----- ----- SUPERFAMILY - ' + search_species['superfamily'].values[0])
+    if not search_species['family'].isnull().values.any():
         st.write('----- ----- ----- ----- FAMILY - ' + search_species['family'].values[0])
+    if not search_species['subfamily'].isnull().values.any():
+        st.write('----- ----- ----- ----- SUBFAMILY - ' + search_species['subfamily'].values[0])
 except:
     st.write('please try again')
 
