@@ -112,7 +112,7 @@ if king_filter:
         )
         fig_order.update_yaxes(gridcolor = 'white')
         st.plotly_chart(fig_order)
-        order_filter = st.selectbox("Select the Order", pd.unique(phylf["order"].sort_values())) 
+        order_filter = st.selectbox("Select the Order", pd.unique(classf["order"].sort_values())) 
 
     with colf4:
         orderf = classf[classf['order'] == order_filter]
