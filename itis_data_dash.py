@@ -166,7 +166,6 @@ st.markdown('''---''')
 species_search = st.text_input('Species search (e.g. *Ursus maritimus*)', value = '')
 try:
     species_search = species_search.upper()
-    print(species_search)
     search_species = df[df['complete_name'].str.upper() == species_search]
     if not search_species['tsn'].isnull().values.any():
         itis_link = 'https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=' + search_species['tsn'].values[0].astype(str) + ''
