@@ -69,10 +69,10 @@ try:
         #itis_link = search_species['tsn'].values[0].astype(str)
     if not search_species['kingdom'].isnull().values.any():
         st.write('KINGDOM - ' + search_species['kingdom'].values[0])
-        st.write('---- PHYLUM - ' + search_species['phylum'].values[0])
-        st.write('---- ---- CLASS - ' + search_species['class'].values[0])
-        st.write('---- ---- ---- ORDER - ' + search_species['order'].values[0])
-        st.write('---- ---- ---- ---- FAMILY - ' + search_species['family'].values[0])
+        st.write('----- PHYLUM - ' + search_species['phylum'].values[0])
+        st.write('----- ----- CLASS - ' + search_species['class'].values[0])
+        st.write('----- ----- ----- ORDER - ' + search_species['order'].values[0])
+        st.write('----- ----- ----- ----- FAMILY - ' + search_species['family'].values[0])
 except:
     st.write('please try again')
 
