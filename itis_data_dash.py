@@ -137,6 +137,7 @@ st.write('---')
 
 ## Search by Common name
 # free search box, return sci and vern names sorted by vern name
+st.header('Name Search')
 st.write(':orange[Note: Scientific name =  complete_name, Common name = vernacular_name]') 
 text_search = st.text_input('Find species by name (e.g. polar bear or *Ursus maritimus*):', value = '')
 search_sp = cn['complete_name'].str.contains(text_search, case=False)
@@ -164,67 +165,67 @@ if text_search:
 st.markdown('''---''')
 
 ## Search by Species
-species_search = st.text_input('Species search (e.g. *Ursus maritimus*)', value = '')
-try:
-    species_search = species_search.upper()
-    search_species = df[df['complete_name'].str.upper() == species_search]
-    if not search_species['tsn'].isnull().values.any():
-        itis_link = 'https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=' + search_species['tsn'].values[0].astype(str) + ''
-        st.write(search_species['name_usage'].values[0] + ' -- ' + itis_link)
-        #itis_link = search_species['tsn'].values[0].astype(str)
-    if not search_species['kingdom'].isnull().values.any():
-        st.write('KINGDOM - ' + search_species['kingdom'].values[0])
-    if not search_species['subkingdom'].isnull().values.any():
-        st.write('SUBKINGDOM - ' + search_species['subkingdom'].values[0])
-    if not search_species['phylum'].isnull().values.any():
-        st.write('----- PHYLUM - ' + search_species['phylum'].values[0])
-    if not search_species['subphylum'].isnull().values.any():
-        st.write('----- SUBPHYLUM - ' + search_species['subphylum'].values[0])
-    if not search_species['class'].isnull().values.any():
-        st.write('----- ----- CLASS - ' + search_species['class'].values[0])
-    if not search_species['superorder'].isnull().values.any():
-        st.write('----- ----- ----- SUPERORDER - ' + search_species['superorder'].values[0])
-    if not search_species['order'].isnull().values.any():
-        st.write('----- ----- ----- ORDER - ' + search_species['order'].values[0])
-    if not search_species['suborder'].isnull().values.any():
-        st.write('----- ----- ----- SUBORDER - ' + search_species['suborder'].values[0])
-    if not search_species['superfamily'].isnull().values.any():
-        st.write('----- ----- ----- ----- SUPERFAMILY - ' + search_species['superfamily'].values[0])
-    if not search_species['family'].isnull().values.any():
-        st.write('----- ----- ----- ----- FAMILY - ' + search_species['family'].values[0])
-    if not search_species['subfamily'].isnull().values.any():
-        st.write('----- ----- ----- ----- SUBFAMILY - ' + search_species['subfamily'].values[0])
-except:
-    st.write('please enter a species')
+st.header('Scientific Name Search')
+species_search = st.text_input('Species search (e.g. *Ursus* or *Ursus maritimus*)', value = '')
+if species_search:
+    genus = species_search.split()
+    try:
+        species_search = species_search.upper()
+        search_species = df[df['complete_name'].str.upper() == species_search]
+        if not search_species['tsn'].isnull().values.any():
+            itis_link = 'https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=' + search_species['tsn'].values[0].astype(str) + ''
+            st.write(search_species['name_usage'].values[0] + ' -- ' + itis_link)
+            #itis_link = search_species['tsn'].values[0].astype(str)
+        if not search_species['kingdom'].isnull().values.any():
+            st.write('KINGDOM - ' + search_species['kingdom'].values[0])
+        if not search_species['subkingdom'].isnull().values.any():
+            st.write('SUBKINGDOM - ' + search_species['subkingdom'].values[0])
+        if not search_species['phylum'].isnull().values.any():
+            st.write('----- PHYLUM - ' + search_species['phylum'].values[0])
+        if not search_species['subphylum'].isnull().values.any():
+            st.write('----- SUBPHYLUM - ' + search_species['subphylum'].values[0])
+        if not search_species['class'].isnull().values.any():
+            st.write('----- ----- CLASS - ' + search_species['class'].values[0])
+        if not search_species['superorder'].isnull().values.any():
+            st.write('----- ----- ----- SUPERORDER - ' + search_species['superorder'].values[0])
+        if not search_species['order'].isnull().values.any():
+            st.write('----- ----- ----- ORDER - ' + search_species['order'].values[0])
+        if not search_species['suborder'].isnull().values.any():
+            st.write('----- ----- ----- SUBORDER - ' + search_species['suborder'].values[0])
+        if not search_species['superfamily'].isnull().values.any():
+            st.write('----- ----- ----- ----- SUPERFAMILY - ' + search_species['superfamily'].values[0])
+        if not search_species['family'].isnull().values.any():
+            st.write('----- ----- ----- ----- FAMILY - ' + search_species['family'].values[0])
+        if not search_species['subfamily'].isnull().values.any():
+            st.write('----- ----- ----- ----- SUBFAMILY - ' + search_species['subfamily'].values[0])
+    except:
+        st.write('please enter a species')
 
-st.markdown('''---''')
+    ## Search by Genus
+    #ge_search = st.text_input('Enter Genus (e.g. *Ursus*)', value = '')
+    ge_search = genus[0]
+    ge_search = ge_search.title()
+    placeholder = st.empty()
+    search_ge = df[df['unit_name1'] == ge_search]
+    #search_ge = df[df['unit_name1'].str.contains(ge_search, case=False)]
+    df2 = search_ge.sort_values(by=['complete_name'])
 
+    ## Dataframe based on Genus
+    df1 = df2[['tsn','name_usage','complete_name','subfamily','family','superfamily','suborder','order','superorder','class','subphylum','phylum','subkingdom','kingdom']]
+    def color_vald(val):
+        color = 'green' if val == 'valid' or val == 'accepted' else ''
+        return f'background-color: {color}'
+    if ge_search:
+        st.dataframe(df1.style.applymap(color_vald, subset=['name_usage']), use_container_width=True)
 
-
-## Search by Genus
-ge_search = st.text_input('Enter Genus (e.g. *Ursus*)', value = '')
-ge_search = ge_search.title()
-placeholder = st.empty()
-search_ge = df[df['unit_name1'] == ge_search]
-#search_ge = df[df['unit_name1'].str.contains(ge_search, case=False)]
-df2 = search_ge.sort_values(by=['complete_name'])
-
-## Dataframe based on Genus
-df1 = df2[['tsn','name_usage','complete_name','subfamily','family','superfamily','suborder','order','superorder','class','subphylum','phylum','subkingdom','kingdom']]
-def color_vald(val):
-    color = 'green' if val == 'valid' or val == 'accepted' else ''
-    return f'background-color: {color}'
-if ge_search:
-    st.dataframe(df1.style.applymap(color_vald, subset=['name_usage']), use_container_width=True)
-
-    ## Download CSV button
-    csv2 = convert_df(df1)
-    st.download_button(
-        label='Download data as CSV',
-        data=csv2,
-        file_name = 'itis_data-' + ge_search + '.csv',
-        mime='text/csv',
-    )
+        ## Download CSV button
+        csv2 = convert_df(df1)
+        st.download_button(
+            label='Download data as CSV',
+            data=csv2,
+            file_name = 'itis_data-' + ge_search + '.csv',
+            mime='text/csv',
+        )
 
 st.markdown('''---''')
 
