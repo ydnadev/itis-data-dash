@@ -203,6 +203,7 @@ if species_search:
 
     ## Search by Genus
     #ge_search = st.text_input('Enter Genus (e.g. *Ursus*)', value = '')
+    st.markdown('## Genus table')
     ge_search = genus[0]
     ge_search = ge_search.title()
     placeholder = st.empty()
