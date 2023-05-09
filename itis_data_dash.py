@@ -212,8 +212,7 @@ if species_search:
     df2 = search_ge.sort_values(by=['complete_name'])
 
     ## Dataframe based on Genus
-    df1 = df2[['tsn','name_usage','complete_name','kingdom','subkingdom','phylum','subphylum','class','superorder','order','suborder','superfamily','family','subfamily']]
-
+    df1 = df2[['tsn','name_usage','complete_name','subfamily','family','superfamily','suborder','order','superorder','class','subphylum','phylum','subkingdom','kingdom']]
     def color_vald(val):
         color = 'green' if val == 'valid' or val == 'accepted' else ''
         return f'background-color: {color}'
