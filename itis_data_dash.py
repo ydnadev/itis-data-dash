@@ -33,104 +33,105 @@ df = get_data()
 st.write('---')
 
 # Summation charts
-c1,c2,c3 = st.columns(3)
-with c2:
-    fig_king = go.Figure()
-    fig_king.add_trace(go.Bar(
-        x = df['kingdom'].value_counts(),
-        y = df['kingdom'].value_counts().index,
-        marker = dict(color = 'crimson'),
-        orientation = 'h'
-    ))
-    fig_king.update_layout(
-        title='ITIS TSN by Kingdom',
-        yaxis = dict(autorange = 'reversed'),
-        xaxis_title = 'TSN count',
-        plot_bgcolor = '#dbdbdb'
-    )
-    fig_king.update_yaxes(gridcolor = 'white')
-    st.plotly_chart(fig_king)
-king_filter = st.selectbox("Select the Kingdom", pd.unique(df["kingdom"].sort_values()))
-
-if king_filter:
-    kingf = df[df["kingdom"] == king_filter]
-
-    colf1, colf2 = st.columns(2)
-    colf3, colf4 = st.columns(2)
-    
-    with colf1:
-        fig_phyl = go.Figure()
-        fig_phyl.add_trace(go.Bar(
-            x = kingf['phylum'].value_counts(),
-            y = kingf['phylum'].value_counts().index,
-            marker = dict(color = 'blue'),
+with st.expander("Groupings by Taxa"):
+    c1,c2,c3 = st.columns(3)
+    with c2:
+        fig_king = go.Figure()
+        fig_king.add_trace(go.Bar(
+            x = df['kingdom'].value_counts(),
+            y = df['kingdom'].value_counts().index,
+            marker = dict(color = 'crimson'),
             orientation = 'h'
         ))
-        fig_phyl.update_layout(
-            title='ITIS TSN by Phylum',
+        fig_king.update_layout(
+            title='ITIS TSN by Kingdom',
             yaxis = dict(autorange = 'reversed'),
             xaxis_title = 'TSN count',
             plot_bgcolor = '#dbdbdb'
         )
-        fig_phyl.update_yaxes(gridcolor = 'white')
-        st.plotly_chart(fig_phyl)
-        phyl_filter = st.selectbox("Select the Phylum", pd.unique(kingf["phylum"].sort_values()))
-    
-    with colf2:
-        phylf = kingf[kingf['phylum'] == phyl_filter]
-        fig_class = go.Figure()
-        fig_class.add_trace(go.Bar(
-            x = phylf['class'].value_counts(),
-            y = phylf['class'].value_counts().index,
-            marker = dict(color = 'green'),
-            orientation = 'h'
-        ))
-        fig_class.update_layout(
-            title='ITIS TSN by Class',
-            yaxis = dict(autorange = 'reversed'),
-            xaxis_title = 'TSN count',
-            plot_bgcolor = '#dbdbdb'
-        )
-        fig_class.update_yaxes(gridcolor = 'white')
-        st.plotly_chart(fig_class)
-        class_filter = st.selectbox("Select the Class", pd.unique(phylf["class"].sort_values())) 
+        fig_king.update_yaxes(gridcolor = 'white')
+        st.plotly_chart(fig_king)
+    king_filter = st.selectbox("Select the Kingdom", pd.unique(df["kingdom"].sort_values()))
 
-    with colf3:
-        classf = phylf[phylf['class'] == class_filter]
-        fig_order = go.Figure()
-        fig_order.add_trace(go.Bar(
-            x = classf['order'].value_counts(),
-            y = classf['order'].value_counts().index,
-            marker = dict(color = 'orange'),
-            orientation = 'h'
-        ))
-        fig_order.update_layout(
-            title='ITIS TSN by Order',
-            yaxis = dict(autorange = 'reversed'),
-            xaxis_title = 'TSN count',
-            plot_bgcolor = '#dbdbdb'
-        )
-        fig_order.update_yaxes(gridcolor = 'white')
-        st.plotly_chart(fig_order)
-        order_filter = st.selectbox("Select the Order", pd.unique(classf["order"].sort_values())) 
+    if king_filter:
+        kingf = df[df["kingdom"] == king_filter]
 
-    with colf4:
-        orderf = classf[classf['order'] == order_filter]
-        fig_order = go.Figure()
-        fig_order.add_trace(go.Bar(
-            x = orderf['family'].value_counts(),
-            y = orderf['family'].value_counts().index,
-            marker = dict(color = 'black'),
-            orientation = 'h'
-        ))
-        fig_order.update_layout(
-            title='ITIS TSN by Family',
-            yaxis = dict(autorange = 'reversed'),
-            xaxis_title = 'TSN count',
-            plot_bgcolor = '#dbdbdb'
-        )
-        fig_order.update_yaxes(gridcolor = 'white')
-        st.plotly_chart(fig_order)
+        colf1, colf2 = st.columns(2)
+        colf3, colf4 = st.columns(2)
+        
+        with colf1:
+            fig_phyl = go.Figure()
+            fig_phyl.add_trace(go.Bar(
+                x = kingf['phylum'].value_counts(),
+                y = kingf['phylum'].value_counts().index,
+                marker = dict(color = 'blue'),
+                orientation = 'h'
+            ))
+            fig_phyl.update_layout(
+                title='ITIS TSN by Phylum',
+                yaxis = dict(autorange = 'reversed'),
+                xaxis_title = 'TSN count',
+                plot_bgcolor = '#dbdbdb'
+            )
+            fig_phyl.update_yaxes(gridcolor = 'white')
+            st.plotly_chart(fig_phyl)
+            phyl_filter = st.selectbox("Select the Phylum", pd.unique(kingf["phylum"].sort_values()))
+        
+        with colf2:
+            phylf = kingf[kingf['phylum'] == phyl_filter]
+            fig_class = go.Figure()
+            fig_class.add_trace(go.Bar(
+                x = phylf['class'].value_counts(),
+                y = phylf['class'].value_counts().index,
+                marker = dict(color = 'green'),
+                orientation = 'h'
+            ))
+            fig_class.update_layout(
+                title='ITIS TSN by Class',
+                yaxis = dict(autorange = 'reversed'),
+                xaxis_title = 'TSN count',
+                plot_bgcolor = '#dbdbdb'
+            )
+            fig_class.update_yaxes(gridcolor = 'white')
+            st.plotly_chart(fig_class)
+            class_filter = st.selectbox("Select the Class", pd.unique(phylf["class"].sort_values())) 
+
+        with colf3:
+            classf = phylf[phylf['class'] == class_filter]
+            fig_order = go.Figure()
+            fig_order.add_trace(go.Bar(
+                x = classf['order'].value_counts(),
+                y = classf['order'].value_counts().index,
+                marker = dict(color = 'orange'),
+                orientation = 'h'
+            ))
+            fig_order.update_layout(
+                title='ITIS TSN by Order',
+                yaxis = dict(autorange = 'reversed'),
+                xaxis_title = 'TSN count',
+                plot_bgcolor = '#dbdbdb'
+            )
+            fig_order.update_yaxes(gridcolor = 'white')
+            st.plotly_chart(fig_order)
+            order_filter = st.selectbox("Select the Order", pd.unique(classf["order"].sort_values())) 
+
+        with colf4:
+            orderf = classf[classf['order'] == order_filter]
+            fig_order = go.Figure()
+            fig_order.add_trace(go.Bar(
+                x = orderf['family'].value_counts(),
+                y = orderf['family'].value_counts().index,
+                marker = dict(color = 'black'),
+                orientation = 'h'
+            ))
+            fig_order.update_layout(
+                title='ITIS TSN by Family',
+                yaxis = dict(autorange = 'reversed'),
+                xaxis_title = 'TSN count',
+                plot_bgcolor = '#dbdbdb'
+            )
+            fig_order.update_yaxes(gridcolor = 'white')
+            st.plotly_chart(fig_order)
 
 st.write('---')
 
@@ -194,7 +195,7 @@ try:
     if not search_species['subfamily'].isnull().values.any():
         st.write('----- ----- ----- ----- SUBFAMILY - ' + search_species['subfamily'].values[0])
 except:
-    st.write('please try again')
+    st.write('please enter a species')
 
 st.markdown('''---''')
 
