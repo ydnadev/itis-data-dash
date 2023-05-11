@@ -14,6 +14,10 @@ pd.set_option('display.max_rows',None)
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
+#get data from parquet file
+def get_data(f) -> pd.DataFrame:
+    return pd.read_parquet(f)
+
 # Main app
 st.header('ITIS Taxa Lookup')
 st.write('Data from Integrated Taxonomic Information System (ITIS) - https://www.itis.gov/')
@@ -21,14 +25,12 @@ st.write('data load date: :blue[26-Apr-2023]')
 st.write('TSN -- Taxonomic Serial Number')
 
 # Get data from parquet file for vernacular names
-def get_data() -> pd.DataFrame:
-    return pd.read_parquet('data/itis_vernacular.parquet')
-cn = get_data()
+its_vern = 'data/itis_vernacular.parquet'
+cn = get_data(its_vern)
 
 # Get data from parquet file for species data
-def get_data() -> pd.DataFrame:
-    return pd.read_parquet('data/itis.parquet')
-df = get_data()
+itis_spec = 'data/itis.parquet'
+df = get_data(itis_spec)
 
 st.write('---')
 
