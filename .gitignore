@@ -1,3 +1,4 @@
 *.csv
 itisdata/*
 data-*
+environment.yml
