@@ -1,7 +1,9 @@
 import pandas as pd
+import plotly.express as px
+import plotly.graph_objects as go
 import pyarrow.parquet as pq
 import streamlit as st
-import plotly.graph_objects as go
+from fastparquet import ParquetFile
 
 # Streamlit config
 st.set_page_config(
@@ -31,6 +33,11 @@ cn = get_data(its_vern)
 # Get data from parquet file for species data
 itis_spec = 'data/itis.parquet'
 df = get_data(itis_spec)
+
+# Get data from parquet file for geographics values
+geo = 'data/itis_geographic.parquet'
+gd = ParquetFile(geo)
+ll = pd.read_csv('data/lat_long.csv')
 
 st.write('---')
 
@@ -177,7 +184,13 @@ if species_search:
         if not search_species['tsn'].isnull().values.any():
             itis_link = 'https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=' + search_species['tsn'].values[0].astype(str) + ''
             st.write(search_species['name_usage'].values[0] + ' -- ' + itis_link)
-            #itis_link = search_species['tsn'].values[0].astype(str)
+            val1 = search_species['tsn'].values[0]
+            gdf = gd.to_pandas(filters=(('tsn', '==', val1),))
+            sp_dist = gdf[gdf['tsn'] == val1]
+            sp_dist_ll = sp_dist.merge(ll, left_on='geographic_value', right_on='geographic_value')
+            datamap = px.scatter_geo(sp_dist_ll, lat = 'latitude', lon = 'longitude', color = 'geographic_value')
+            datamap.update_traces(marker=dict(size=30))
+            st.plotly_chart(datamap)
         if not search_species['kingdom'].isnull().values.any():
             st.write('KINGDOM - ' + search_species['kingdom'].values[0])
         if not search_species['subkingdom'].isnull().values.any():
@@ -220,7 +233,6 @@ if species_search:
         return f'background-color: {color}'
     if ge_search:
         st.dataframe(df1.style.applymap(color_vald, subset=['name_usage']), use_container_width=True)
-
         ## Download CSV button
         csv2 = convert_df(df1)
         st.download_button(
