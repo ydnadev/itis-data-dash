@@ -187,10 +187,11 @@ if species_search:
             val1 = search_species['tsn'].values[0]
             gdf = gd.to_pandas(filters=(('tsn', '==', val1),))
             sp_dist = gdf[gdf['tsn'] == val1]
-            sp_dist_ll = sp_dist.merge(ll, left_on='geographic_value', right_on='geographic_value')
-            datamap = px.scatter_geo(sp_dist_ll, lat = 'latitude', lon = 'longitude', color = 'geographic_value')
-            datamap.update_traces(marker=dict(size=30))
-            st.plotly_chart(datamap)
+            if not sp_dist.empty:
+                sp_dist_ll = sp_dist.merge(ll, left_on='geographic_value', right_on='geographic_value')
+                datamap = px.scatter_geo(sp_dist_ll, lat = 'latitude', lon = 'longitude', color = 'geographic_value')
+                datamap.update_traces(marker=dict(size=30))
+                st.plotly_chart(datamap)
         if not search_species['kingdom'].isnull().values.any():
             st.write('KINGDOM - ' + search_species['kingdom'].values[0])
         if not search_species['subkingdom'].isnull().values.any():
