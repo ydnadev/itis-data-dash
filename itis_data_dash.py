@@ -12,11 +12,11 @@ st.set_page_config(
 )
 pd.set_option('display.max_rows',None)
 
-#CSV convert def
+# CSV convert def
 def convert_df(df):
     return df.to_csv().encode('utf-8')
 
-#get data from parquet file
+# get data from parquet file
 def get_data(f) -> pd.DataFrame:
     return pd.read_parquet(f)
 
@@ -152,14 +152,13 @@ text_search = st.text_input('Find species by name (e.g. polar bear or *Ursus mar
 search_sp = cn['complete_name'].str.contains(text_search, case=False)
 search_cn = cn['vernacular_name'].str.contains(text_search, case=False)
 df_search = cn[search_sp | search_cn]
-#df_search['scientific_name'] = df_search['complete_name']
 df_return = df_search[['tsn','complete_name','vernacular_name']]
 df_return['vernacular_name_upper'] = df_return['vernacular_name'].str.upper()
 df_return = df_return.sort_values(by=['vernacular_name_upper'])
 df_return['tsn'] = df_return['tsn'].astype(str)
 del df_return['vernacular_name_upper']
 if text_search:
-    st.dataframe(df_return,use_container_width=True)
+    st.dataframe(df_return.set_index(df_return.columns[0]),use_container_width=True)
     #<--
 
     ## Download CSV button
@@ -218,13 +217,11 @@ if species_search:
         st.write('please enter a species')
 
     ## Search by Genus
-    #ge_search = st.text_input('Enter Genus (e.g. *Ursus*)', value = '')
     st.markdown('## Genus table')
     ge_search = genus[0]
     ge_search = ge_search.title()
     placeholder = st.empty()
     search_ge = df[df['unit_name1'] == ge_search]
-    #search_ge = df[df['unit_name1'].str.contains(ge_search, case=False)]
     df2 = search_ge.sort_values(by=['complete_name'])
 
     ## Dataframe based on Genus
@@ -233,7 +230,8 @@ if species_search:
         color = 'green' if val == 'valid' or val == 'accepted' else ''
         return f'background-color: {color}'
     if ge_search:
-        st.dataframe(df1.style.applymap(color_vald, subset=['name_usage']), use_container_width=True)
+        df1['tsn'] = df1['tsn'].astype(str)
+        st.dataframe(df1.set_index(df1.columns[0]).style.applymap(color_vald, subset=['name_usage']), use_container_width=True)
         ## Download CSV button
         csv2 = convert_df(df1)
         st.download_button(
