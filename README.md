@@ -1,7 +1,7 @@
 # ITIS Data Dash
 
 Simple dashboard of taxonomic data sourced from ITIS [[1]](#1).
-Dashboard: https://ydnadev-itis-data-dash-itis-data-dash-mmsio8.streamlit.app/
+Dashboard: https://itis-taxonomy-search.streamlit.app/
 
 ## Usage
 
