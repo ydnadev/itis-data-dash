@@ -15,7 +15,7 @@ pd.set_option('display.max_rows',None)
 # CSS
 def local_css(file_name):
     with open(file_name) as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html = True)
 local_css('css/streamlit.css')
 
 
@@ -156,8 +156,8 @@ st.write('---')
 st.header('Name Search')
 st.write(':orange[Note: Scientific name =  complete_name, Common name = vernacular_name]') 
 text_search = st.text_input('Find species by name (e.g. polar bear or *Ursus maritimus*):', value = '')
-search_sp = cn['complete_name'].str.contains(text_search, case=False)
-search_cn = cn['vernacular_name'].str.contains(text_search, case=False)
+search_sp = cn['complete_name'].str.contains(text_search, case = False)
+search_cn = cn['vernacular_name'].str.contains(text_search, case = False)
 df_search = cn[search_sp | search_cn]
 df_return = df_search[['tsn','complete_name','vernacular_name']]
 df_return['vernacular_name_upper'] = df_return['vernacular_name'].str.upper()
@@ -165,7 +165,7 @@ df_return = df_return.sort_values(by=['vernacular_name_upper'])
 df_return['tsn'] = df_return['tsn'].astype(str)
 del df_return['vernacular_name_upper']
 if text_search:
-    st.dataframe(df_return.set_index(df_return.columns[0]),use_container_width=True)
+    st.dataframe(df_return.set_index(df_return.columns[0]), use_container_width = True)
     #<--
 
     ## Download CSV button
@@ -195,9 +195,9 @@ if species_search:
             gdf = gd.to_pandas(filters=(('tsn', '==', val1),))
             sp_dist = gdf[gdf['tsn'] == val1]
             if not sp_dist.empty:
-                sp_dist_ll = sp_dist.merge(ll, left_on='geographic_value', right_on='geographic_value')
+                sp_dist_ll = sp_dist.merge(ll, left_on = 'geographic_value', right_on = 'geographic_value')
                 datamap = px.scatter_geo(sp_dist_ll, lat = 'latitude', lon = 'longitude', color = 'geographic_value')
-                datamap.update_traces(marker=dict(size=30))
+                datamap.update_traces(marker = dict(size = 30))
                 st.plotly_chart(datamap)
         if not search_species['kingdom'].isnull().values.any():
             st.write('KINGDOM - ' + search_species['kingdom'].values[0])
@@ -239,7 +239,7 @@ if species_search:
         return f'background-color: {color}'
     if ge_search:
         df1['tsn'] = df1['tsn'].astype(str)
-        st.dataframe(df1.set_index(df1.columns[0]).style.applymap(color_vald, subset=['name_usage']), use_container_width=True)
+        st.dataframe(df1.set_index(df1.columns[0]).style.applymap(color_vald, subset = ['name_usage']), use_container_width = True)
         ## Download CSV button
         csv2 = convert_df(df1)
         st.download_button(
