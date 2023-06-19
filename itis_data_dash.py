@@ -16,7 +16,7 @@ pd.set_option('display.max_rows',None)
 def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
-local_css("css/streamlit.css")
+local_css('css/streamlit.css')
 
 
 # CSV convert def
@@ -49,7 +49,7 @@ ll = pd.read_csv('data/lat_long.csv')
 st.write('---')
 
 # Summation charts
-with st.expander("Groupings by Taxa"):
+with st.expander('Groupings by Taxa'):
     c1,c2,c3 = st.columns(3)
     with c2:
         fig_king = go.Figure()
@@ -67,10 +67,10 @@ with st.expander("Groupings by Taxa"):
         )
         fig_king.update_yaxes(gridcolor = 'white')
         st.plotly_chart(fig_king)
-    king_filter = st.selectbox("Select the Kingdom", pd.unique(df["kingdom"].sort_values()))
+    king_filter = st.selectbox('Select the Kingdom', pd.unique(df['kingdom'].sort_values()))
 
     if king_filter:
-        kingf = df[df["kingdom"] == king_filter]
+        kingf = df[df['kingdom'] == king_filter]
 
         colf1, colf2 = st.columns(2)
         colf3, colf4 = st.columns(2)
@@ -91,7 +91,7 @@ with st.expander("Groupings by Taxa"):
             )
             fig_phyl.update_yaxes(gridcolor = 'white')
             st.plotly_chart(fig_phyl)
-            phyl_filter = st.selectbox("Select the Phylum", pd.unique(kingf["phylum"].sort_values()))
+            phyl_filter = st.selectbox('Select the Phylum', pd.unique(kingf['phylum'].sort_values()))
         
         with colf2:
             phylf = kingf[kingf['phylum'] == phyl_filter]
@@ -110,7 +110,7 @@ with st.expander("Groupings by Taxa"):
             )
             fig_class.update_yaxes(gridcolor = 'white')
             st.plotly_chart(fig_class)
-            class_filter = st.selectbox("Select the Class", pd.unique(phylf["class"].sort_values())) 
+            class_filter = st.selectbox('Select the Class', pd.unique(phylf['class'].sort_values())) 
 
         with colf3:
             classf = phylf[phylf['class'] == class_filter]
@@ -129,7 +129,7 @@ with st.expander("Groupings by Taxa"):
             )
             fig_order.update_yaxes(gridcolor = 'white')
             st.plotly_chart(fig_order)
-            order_filter = st.selectbox("Select the Order", pd.unique(classf["order"].sort_values())) 
+            order_filter = st.selectbox('Select the Order', pd.unique(classf['order'].sort_values())) 
 
         with colf4:
             orderf = classf[classf['order'] == order_filter]
@@ -171,10 +171,11 @@ if text_search:
     ## Download CSV button
     csv = convert_df(df_return)
     st.download_button(
-        label='Download data as CSV',
-        data=csv,
+        key = 'dl_common',
+        label = 'Download data as CSV',
+        data = csv,
         file_name = 'itis_vernacular-' + text_search + '.csv',
-        mime='text/csv',
+        mime = 'text/csv',
     )
 
 st.markdown('''---''')
@@ -242,10 +243,11 @@ if species_search:
         ## Download CSV button
         csv2 = convert_df(df1)
         st.download_button(
-            label='Download data as CSV',
-            data=csv2,
+            key = 'dl_genus',
+            label = 'Download data as CSV',
+            data = csv2,
             file_name = 'itis_data-' + ge_search + '.csv',
-            mime='text/csv',
+            mime = 'text/csv',
         )
 
 st.markdown('''---''')
