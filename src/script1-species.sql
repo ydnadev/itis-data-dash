@@ -1,3 +1,4 @@
+/* file: species.txt tab sep */
 /* find all species level data */
 select tu.*
 from taxonomic_units tu
