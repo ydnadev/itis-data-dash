@@ -37,7 +37,7 @@ st.header("ITIS Taxa Lookup")
 st.write(
     "Data from Integrated Taxonomic Information System (ITIS) - https://www.itis.gov/"
 )
-st.write("data load date: :blue[25-May-2023]")
+st.write("data load date: :blue[28-Jun-2023]")
 st.write("TSN -- Taxonomic Serial Number")
 
 # Get data from parquet file for vernacular names
