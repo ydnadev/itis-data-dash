@@ -1,3 +1,6 @@
+.headers on
+.mode csv
+.output ../itisdata/taxa-subspecies.csv
 /* file: taxa-subspecies.csv */
 /* export all animal taxa */
 select tu.tsn
@@ -9,3 +12,4 @@ where tu.rank_id not in ('230') --subspecies
     --and tu.kingdom_id = '5' --animals, remove if desired
 order by tu.tsn
 ;
+.output stdout
