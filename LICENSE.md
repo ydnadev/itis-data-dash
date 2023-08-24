@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2023 Conservation Data Lab at the San Diego Zoo Wildlife Alliance
+Copyright (c) 2023 Conservation Tech Lab at the San Diego Zoo Wildlife Alliance
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
