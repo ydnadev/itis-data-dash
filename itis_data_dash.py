@@ -332,3 +332,4 @@ if species_search:
 st.markdown("""---""")
 
 st.write("Github - https://github.com/ydnadev/itis-data-dash")
+st.write("Copyright (c) 2023 Conservation Tech Lab at the San Diego Zoo Wildlife Alliance")
