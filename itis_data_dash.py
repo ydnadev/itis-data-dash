@@ -18,18 +18,20 @@ def local_css(file_name):
     with open(file_name) as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 
-
 local_css("css/streamlit.css")
-
 
 # CSV convert def
 def convert_df(df):
     return df.to_csv().encode("utf-8")
 
-
 # get data from parquet file
 def get_data(f) -> pd.DataFrame:
     return pd.read_parquet(f)
+
+# valid results are green
+def color_vald(val):
+    color = "green" if val == "valid" or val == "accepted" else ""
+    return f"background-color: {color}"
 
 
 # Main app
@@ -52,8 +54,6 @@ df = get_data(itis_spec)
 geo = "data/itis_geographic.parquet"
 gd = ParquetFile(geo)
 ll = pd.read_csv("data/lat_long.csv")
-
-st.write("---")
 
 # Summation charts
 with st.expander("Groupings by Taxa"):
@@ -174,14 +174,12 @@ with st.expander("Groupings by Taxa"):
             fig_order.update_yaxes(gridcolor="white")
             st.plotly_chart(fig_order)
 
-st.write("---")
-
 ## Search by Common name
 # free search box, return sci and vern names sorted by vern name
-st.header("Name Search")
 st.write(
     ":orange[Note: Scientific name =  complete_name, Common name = vernacular_name]"
 )
+st.header("Name Search")
 text_search = st.text_input(
     "Find species by name (e.g. polar bear or *Ursus maritimus*):", value=""
 )
@@ -306,10 +304,6 @@ if species_search:
             "kingdom",
         ]
     ]
-
-    def color_vald(val):
-        color = "green" if val == "valid" or val == "accepted" else ""
-        return f"background-color: {color}"
 
     if ge_search:
         df1["tsn"] = df1["tsn"].astype(str)
