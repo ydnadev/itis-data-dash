@@ -30,7 +30,8 @@ streamlit run itis_dash.py
 ## References
 <a id="1">[1]</a> 
 Retrieved from the Integrated Taxonomic Information System (ITIS) on-line database, www.itis.gov, CC0
-https://doi.org/10.5066/F7KH0KBK
+https://doi.org/10.5066/F7KH0KBK  
+<a id="2">[2]</a> Built on Streamlit - https://streamlit.io/
 
 ## Maintainers
 The Conservation Technology Lab at the San Diego Zoo Wildlife Alliance
