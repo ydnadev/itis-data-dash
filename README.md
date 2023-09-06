@@ -5,6 +5,11 @@ Dashboard: https://itis-taxonomy-search.streamlit.app/
 
 ## Usage
 
+### Dashboard
+![Name Search](data/name_search.png)
+![Scientific Name Search](data/sci_name_search.png)
+
+### Data
 *Note - ITIS database does not exist in this repository, download ITIS data from source below.* 
 
 Extract data from ITIS SQLite db  
@@ -26,3 +31,6 @@ streamlit run itis_dash.py
 <a id="1">[1]</a> 
 Retrieved from the Integrated Taxonomic Information System (ITIS) on-line database, www.itis.gov, CC0
 https://doi.org/10.5066/F7KH0KBK
+
+## Maintainers
+The Conservation Technology Lab at the San Diego Zoo Wildlife Alliance
