@@ -1,8 +1,8 @@
 # ITIS Data Dash
 
 Simple dashboard of taxonomic data sourced from ITIS [[1]](#1) that provides:  
-    - exportable taxonomy data table
-    - quick search nomenclature for validity
+    - exportable taxonomy data table   
+    - quick search nomenclature for validity  
 Dashboard: https://itis-taxonomy-search.streamlit.app/
 
 ## Usage
