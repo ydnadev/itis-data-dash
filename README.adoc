@@ -20,6 +20,10 @@ Extract data from ITIS SQLite db
 * run src/script2-species.sql to dump data for all taxa hierarchy as csv to __itisdata/taxa-species.csv__  
 * run src/script2-subspecies.sql to dump data for all taxa hierarchy as csv to __itisdata/taxa-subspecies.csv__  
 
+Test
+* one
+* two
+
 Parsing assumes 2 files above- 
 [source,bash]
 ----
