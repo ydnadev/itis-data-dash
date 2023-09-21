@@ -1,11 +1,11 @@
 = ITIS Data Dash
 
-Simple dashboard of taxonomic data sourced from ITIS <<itis,1>> that provides:
+Simple dashboard [<<dsh,1>>] of taxonomic data sourced from ITIS [<<dat,2>>] that provides:
 
 - exportable taxonomy data table
 - quick search nomenclature for validity
 
-Dashboard <<strm,2>>: https://itis-taxonomy-search.streamlit.app/
+Dashboard: https://itis-taxonomy-search.streamlit.app/
 
 == Usage
 
@@ -36,10 +36,13 @@ Dashboard -
 streamlit run itis_dash.py
 ----
 
+
 == References
-* [[[itis,1]]] Retrieved from the Integrated Taxonomic Information System (ITIS) on-line database, www.itis.gov, CC0
+[bibliography]
+- [[[dsh,1]]] Built on Streamlit - https://streamlit.io/
+- [[[dat,2]]] Retrieved from the Integrated Taxonomic Information System (ITIS) on-line database, www.itis.gov, CC0
 https://doi.org/10.5066/F7KH0KBK  
-* [[[strm,2]]] Built on Streamlit - https://streamlit.io/
 
 == Maintainers
 The Conservation Technology Lab at the San Diego Zoo Wildlife Alliance
+
