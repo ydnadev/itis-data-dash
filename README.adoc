@@ -1,11 +1,11 @@
 = ITIS Data Dash
 
-Simple dashboard of taxonomic data sourced from ITIS <<itis>> that provides:
+Simple dashboard of taxonomic data sourced from ITIS <<itis,1>> that provides:
 
 - exportable taxonomy data table
 - quick search nomenclature for validity
 
-Dashboard <<strm>>: https://itis-taxonomy-search.streamlit.app/
+Dashboard <<strm,2>>: https://itis-taxonomy-search.streamlit.app/
 
 == Usage
 
