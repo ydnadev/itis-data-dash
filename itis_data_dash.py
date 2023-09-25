@@ -1,9 +1,10 @@
+"""ITIS Taxa Lookup"""
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
 from fastparquet import ParquetFile
-
 
 # Streamlit config
 st.set_page_config(
@@ -13,24 +14,24 @@ st.set_page_config(
 pd.set_option("display.max_rows", None)
 
 
-# CSS
 def local_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
+    """CSS format."""
+    with open(file_name, encoding='UTF-8') as css:
+        st.markdown(f"<style>{css.read()}</style>", unsafe_allow_html=True)
 
 local_css("css/streamlit.css")
 
-# CSV convert def
-def convert_df(df):
-    return df.to_csv().encode("utf-8")
+def convert_df(data):
+    """Convert dataframe to CSV."""
+    return data.to_csv().encode("utf-8")
 
-# get data from parquet file
-def get_data(f) -> pd.DataFrame:
-    return pd.read_parquet(f)
+def get_data(file) -> pd.DataFrame:
+    """Pull data from parquet file."""
+    return pd.read_parquet(file)
 
-# valid results are green
 def color_vald(val):
-    color = "green" if val == "valid" or val == "accepted" else ""
+    """Return green color for valid results."""
+    color = "green" if val in {"valid", "accepted"} else ""
     return f"background-color: {color}"
 
 
@@ -43,16 +44,16 @@ st.write("data load date: :blue[31-Aug-2023]")
 st.write("TSN -- Taxonomic Serial Number")
 
 # Get data from parquet file for vernacular names
-its_vern = "data/itis_vernacular.parquet"
-cn = get_data(its_vern)
+ITS_VERN = "data/itis_vernacular.parquet"
+cn = get_data(ITS_VERN)
 
 # Get data from parquet file for species data
-itis_spec = "data/itis.parquet"
-df = get_data(itis_spec)
+ITIS_SPEC = "data/itis.parquet"
+df = get_data(ITIS_SPEC)
 
 # Get data from parquet file for geographics values
-geo = "data/itis_geographic.parquet"
-gd = ParquetFile(geo)
+GEO = "data/itis_geographic.parquet"
+gd = ParquetFile(GEO)
 ll = pd.read_csv("data/lat_long.csv")
 
 # Summation charts
@@ -64,13 +65,13 @@ with st.expander("Groupings by Taxa"):
             go.Bar(
                 x=df["kingdom"].value_counts(),
                 y=df["kingdom"].value_counts().index,
-                marker=dict(color="crimson"),
+                marker={"color":"crimson"},
                 orientation="h",
             )
         )
         fig_king.update_layout(
             title="ITIS TSN by Kingdom",
-            yaxis=dict(autorange="reversed"),
+            yaxis={"autorange":"reversed"},
             xaxis_title="TSN count",
             plot_bgcolor="#dbdbdb",
         )
@@ -92,13 +93,13 @@ with st.expander("Groupings by Taxa"):
                 go.Bar(
                     x=kingf["phylum"].value_counts(),
                     y=kingf["phylum"].value_counts().index,
-                    marker=dict(color="blue"),
+                    marker={"color":"blue"},
                     orientation="h",
                 )
             )
             fig_phyl.update_layout(
                 title="ITIS TSN by Phylum",
-                yaxis=dict(autorange="reversed"),
+                yaxis={"autorange":"reversed"},
                 xaxis_title="TSN count",
                 plot_bgcolor="#dbdbdb",
             )
@@ -115,13 +116,13 @@ with st.expander("Groupings by Taxa"):
                 go.Bar(
                     x=phylf["class"].value_counts(),
                     y=phylf["class"].value_counts().index,
-                    marker=dict(color="green"),
+                    marker={"color":"green"},
                     orientation="h",
                 )
             )
             fig_class.update_layout(
                 title="ITIS TSN by Class",
-                yaxis=dict(autorange="reversed"),
+                yaxis={"autorange":"reversed"},
                 xaxis_title="TSN count",
                 plot_bgcolor="#dbdbdb",
             )
@@ -138,13 +139,13 @@ with st.expander("Groupings by Taxa"):
                 go.Bar(
                     x=classf["order"].value_counts(),
                     y=classf["order"].value_counts().index,
-                    marker=dict(color="orange"),
+                    marker={"color":"orange"},
                     orientation="h",
                 )
             )
             fig_order.update_layout(
                 title="ITIS TSN by Order",
-                yaxis=dict(autorange="reversed"),
+                yaxis={"autorange":"reversed"},
                 xaxis_title="TSN count",
                 plot_bgcolor="#dbdbdb",
             )
@@ -161,13 +162,13 @@ with st.expander("Groupings by Taxa"):
                 go.Bar(
                     x=orderf["family"].value_counts(),
                     y=orderf["family"].value_counts().index,
-                    marker=dict(color="black"),
+                    marker={"color":"black"},
                     orientation="h",
                 )
             )
             fig_order.update_layout(
                 title="ITIS TSN by Family",
-                yaxis=dict(autorange="reversed"),
+                yaxis={"autorange":"reversed"},
                 xaxis_title="TSN count",
                 plot_bgcolor="#dbdbdb",
             )
@@ -237,7 +238,7 @@ if species_search:
                     lon="longitude",
                     color="geographic_value",
                 )
-                datamap.update_traces(marker=dict(size=30))
+                datamap.update_traces(marker={"size": 30})
                 st.plotly_chart(datamap)
         if not search_species["kingdom"].isnull().values.any():
             st.write("KINGDOM - " + search_species["kingdom"].values[0])
