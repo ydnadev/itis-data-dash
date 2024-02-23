@@ -1,10 +1,12 @@
 """ITIS Taxa Lookup"""
 
+from datetime import datetime
+from fastparquet import ParquetFile
+
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
-from fastparquet import ParquetFile
 
 # Streamlit config
 st.set_page_config(
@@ -16,23 +18,49 @@ pd.set_option("display.max_rows", None)
 
 def local_css(file_name):
     """CSS format."""
-    with open(file_name, encoding='UTF-8') as css:
+    with open(file_name, encoding="UTF-8") as css:
         st.markdown(f"<style>{css.read()}</style>", unsafe_allow_html=True)
 
+
 local_css("css/streamlit.css")
+
 
 def convert_df(data):
     """Convert dataframe to CSV."""
     return data.to_csv().encode("utf-8")
 
+
 def get_data(file) -> pd.DataFrame:
     """Pull data from parquet file."""
     return pd.read_parquet(file)
+
 
 def color_vald(val):
     """Return green color for valid results."""
     color = "green" if val in {"valid", "accepted"} else ""
     return f"background-color: {color}"
+
+
+def tax_img(tax, frame, col, label):
+    """Plot bar charts for each taxon level."""
+    title_statement = "ITIS TSN by " + label
+    fig = go.Figure()
+    fig.add_trace(
+        go.Bar(
+            x=frame[tax].value_counts(),
+            y=frame[tax].value_counts().index,
+            marker={"color": col},
+            orientation="h",
+        )
+    )
+    fig.update_layout(
+        title=title_statement,
+        yaxis={"autorange": "reversed"},
+        xaxis_title="TSN count",
+        plot_bgcolor="#dbdbdb",
+    )
+    fig.update_yaxes(gridcolor="white")
+    st.plotly_chart(fig)
 
 
 # Main app
@@ -60,23 +88,8 @@ ll = pd.read_csv("data/lat_long.csv")
 with st.expander("Groupings by Taxa"):
     c1, c2, c3 = st.columns(3)
     with c2:
-        fig_king = go.Figure()
-        fig_king.add_trace(
-            go.Bar(
-                x=df["kingdom"].value_counts(),
-                y=df["kingdom"].value_counts().index,
-                marker={"color":"crimson"},
-                orientation="h",
-            )
-        )
-        fig_king.update_layout(
-            title="ITIS TSN by Kingdom",
-            yaxis={"autorange":"reversed"},
-            xaxis_title="TSN count",
-            plot_bgcolor="#dbdbdb",
-        )
-        fig_king.update_yaxes(gridcolor="white")
-        st.plotly_chart(fig_king)
+        tax_img("kingdom", df, "crimson", "Kingdom")
+
     king_filter = st.selectbox(
         "Select the Kingdom", pd.unique(df["kingdom"].sort_values())
     )
@@ -88,92 +101,45 @@ with st.expander("Groupings by Taxa"):
         colf3, colf4 = st.columns(2)
 
         with colf1:
-            fig_phyl = go.Figure()
-            fig_phyl.add_trace(
-                go.Bar(
-                    x=kingf["phylum"].value_counts(),
-                    y=kingf["phylum"].value_counts().index,
-                    marker={"color":"blue"},
-                    orientation="h",
-                )
-            )
-            fig_phyl.update_layout(
-                title="ITIS TSN by Phylum",
-                yaxis={"autorange":"reversed"},
-                xaxis_title="TSN count",
-                plot_bgcolor="#dbdbdb",
-            )
-            fig_phyl.update_yaxes(gridcolor="white")
-            st.plotly_chart(fig_phyl)
+            tax_img("phylum", kingf, "blue", "Phylum")
             phyl_filter = st.selectbox(
                 "Select the Phylum", pd.unique(kingf["phylum"].sort_values())
             )
 
         with colf2:
             phylf = kingf[kingf["phylum"] == phyl_filter]
-            fig_class = go.Figure()
-            fig_class.add_trace(
-                go.Bar(
-                    x=phylf["class"].value_counts(),
-                    y=phylf["class"].value_counts().index,
-                    marker={"color":"green"},
-                    orientation="h",
-                )
-            )
-            fig_class.update_layout(
-                title="ITIS TSN by Class",
-                yaxis={"autorange":"reversed"},
-                xaxis_title="TSN count",
-                plot_bgcolor="#dbdbdb",
-            )
-            fig_class.update_yaxes(gridcolor="white")
-            st.plotly_chart(fig_class)
+            tax_img("class", phylf, "green", "Class")
             class_filter = st.selectbox(
                 "Select the Class", pd.unique(phylf["class"].sort_values())
             )
 
         with colf3:
             classf = phylf[phylf["class"] == class_filter]
-            fig_order = go.Figure()
-            fig_order.add_trace(
-                go.Bar(
-                    x=classf["order"].value_counts(),
-                    y=classf["order"].value_counts().index,
-                    marker={"color":"orange"},
-                    orientation="h",
-                )
-            )
-            fig_order.update_layout(
-                title="ITIS TSN by Order",
-                yaxis={"autorange":"reversed"},
-                xaxis_title="TSN count",
-                plot_bgcolor="#dbdbdb",
-            )
-            fig_order.update_yaxes(gridcolor="white")
-            st.plotly_chart(fig_order)
+            tax_img("order", classf, "orange", "Order")
             order_filter = st.selectbox(
                 "Select the Order", pd.unique(classf["order"].sort_values())
             )
 
         with colf4:
             orderf = classf[classf["order"] == order_filter]
-            fig_order = go.Figure()
-            fig_order.add_trace(
-                go.Bar(
-                    x=orderf["family"].value_counts(),
-                    y=orderf["family"].value_counts().index,
-                    marker={"color":"black"},
-                    orientation="h",
-                )
-            )
-            fig_order.update_layout(
-                title="ITIS TSN by Family",
-                yaxis={"autorange":"reversed"},
-                xaxis_title="TSN count",
-                plot_bgcolor="#dbdbdb",
-            )
-            fig_order.update_yaxes(gridcolor="white")
-            st.plotly_chart(fig_order)
+            tax_img("family", orderf, "black", "Family")
+            # fig_order = go.Figure()
+            # fig_order.add_trace(
+            #    go.Bar(
+            #        x=orderf["family"].value_counts(),
+            #        y=orderf["family"].value_counts().index,
+            #        marker={"color":"black"},
+            #        orientation="h",
+            #    )
+            # )
+            # fig_order.update_layout(
+            #    title="ITIS TSN by Family",
+            #    yaxis={"autorange":"reversed"},
+            #    xaxis_title="TSN count",
+            #    plot_bgcolor="#dbdbdb",
+            # )
+            # fig_order.update_yaxes(gridcolor="white")
+            # st.plotly_chart(fig_order)
 
 ## Search by Common name
 # free search box, return sci and vern names sorted by vern name
@@ -195,16 +161,6 @@ del df_return["vernacular_name_upper"]
 if text_search:
     st.dataframe(df_return.set_index(df_return.columns[0]), use_container_width=True)
     # <--
-
-    ## Download CSV button
-    csv = convert_df(df_return)
-    st.download_button(
-        key="dl_common",
-        label="Download data as CSV",
-        data=csv,
-        file_name="itis_vernacular-" + text_search + ".csv",
-        mime="text/csv",
-    )
 
 st.markdown("""---""")
 
@@ -275,7 +231,7 @@ if species_search:
                 "----- ----- ----- ----- SUBFAMILY - "
                 + search_species["subfamily"].values[0]
             )
-    except:
+    except ValueError:
         st.write("please enter a species")
 
     ## Search by Genus
@@ -314,17 +270,14 @@ if species_search:
             ),
             use_container_width=True,
         )
-        ## Download CSV button
-        csv2 = convert_df(df1)
-        st.download_button(
-            key="dl_genus",
-            label="Download data as CSV",
-            data=csv2,
-            file_name="itis_data-" + ge_search + ".csv",
-            mime="text/csv",
-        )
 
 st.markdown("""---""")
 
+current_year = datetime.now().year
+CR_STATEMENT = (
+    "Copyright (c) "
+    + str(current_year)
+    + " Conservation Tech Lab at the San Diego Zoo Wildlife Alliance"
+)
 st.write("Github - https://github.com/ydnadev/itis-data-dash")
-#st.write("Copyright (c) 2023 Conservation Tech Lab at the San Diego Zoo Wildlife Alliance")
+st.write(CR_STATEMENT)
