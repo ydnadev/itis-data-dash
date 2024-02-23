@@ -1,4 +1,4 @@
-pandas==1.5.3
-plotly==5.13.1
-fastparquet==2023.4.0
+pandas==2.2.0
+plotly==5.19.0
+fastparquet==2024.2.0
 
