@@ -5,7 +5,7 @@ Simple dashboard [<<dsh,1>>] of taxonomic data sourced from ITIS [<<dat,2>>] tha
 - exportable taxonomy data table
 - quick search nomenclature for validity
 
-Dashboard: https://itis-taxonomy-search.streamlit.app/
+Dashboard: https://regressi.online/itis-lookup/
 
 == Usage
 
