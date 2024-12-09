@@ -7,6 +7,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 import streamlit as st
+import streamlit.components.v1 as components
 
 # Streamlit config
 st.set_page_config(
@@ -62,6 +63,11 @@ def tax_img(tax, frame, col, label):
     fig.update_yaxes(gridcolor="white")
     st.plotly_chart(fig)
 
+
+# Create an HTML file with GA tracking code
+with open("google_analytics.html", "r") as f:
+    html_code = f.read()
+components.html(html_code, height=0)
 
 # Main app
 st.header("ITIS Taxa Lookup")
