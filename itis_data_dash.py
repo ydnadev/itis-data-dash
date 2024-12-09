@@ -68,7 +68,7 @@ st.header("ITIS Taxa Lookup")
 st.write(
     "Data from Integrated Taxonomic Information System (ITIS) - https://www.itis.gov/"
 )
-st.write("data load date: :blue[22-Oct-2024]")
+st.write("data load date: :blue[19-Nov-2024]")
 st.write("TSN -- Taxonomic Serial Number")
 
 # Get data from parquet file for vernacular names
@@ -167,7 +167,7 @@ st.markdown("""---""")
 ## Search by Species
 st.header("Scientific Name Search")
 species_search = st.text_input(
-    "Species search (e.g. *Ursus* or *Ursus maritimus*)", value=""
+    "Species search (e.g. *Ursus maritimus*)", value=""
 )
 if species_search:
     genus = species_search.split()
