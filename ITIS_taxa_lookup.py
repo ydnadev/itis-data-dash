@@ -79,10 +79,6 @@ cn = get_data(ITS_VERN)
 ITIS_SPEC = "data/itis.parquet"
 df = get_data(ITIS_SPEC)
 valid = df.filter(pl.col("name_usage") == "valid")
-total_rows = len(df.with_row_count())
-total_valids = len(valid.with_row_count())
-records = str(total_rows) + " TSN records"
-valids = str(total_valids) + " valid records"
 
 # Get data from parquet file for geographics values
 GEO = "data/itis_geographic.parquet"
@@ -94,8 +90,8 @@ with st.sidebar:
     st.write("Update 2024-12-10 - :green[Now faster!]")
     st.write("---")
     st.write("Stats:")
-    st.write(records)
-    st.write(valids)
+    st.write("811864 TSN records")
+    st.write("500153 valid records")
     
 
 ## Search by Common name
