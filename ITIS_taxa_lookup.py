@@ -69,12 +69,8 @@ st.header("ITIS Taxa Lookup")
 st.write(
     "Data from Integrated Taxonomic Information System (ITIS) - https://www.itis.gov/"
 )
+
 st.write("TSN -- Taxonomic Serial Number")
-
-with st.sidebar:
-    st.write("data load date: :blue[19-Nov-2024]")
-    st.write("Update 2024-12-10 - :green[Now faster!]")
-
 # Get data from parquet file for vernacular names
 ITS_VERN = "data/itis_vernacular.parquet"
 cn = get_data(ITS_VERN)
@@ -82,11 +78,25 @@ cn = get_data(ITS_VERN)
 # Get data from parquet file for species data
 ITIS_SPEC = "data/itis.parquet"
 df = get_data(ITIS_SPEC)
+valid = df.filter(pl.col("name_usage") == "valid")
+total_rows = len(df.with_row_count())
+total_valids = len(valid.with_row_count())
+records = str(total_rows) + " TSN records"
+valids = str(total_valids) + " valid records"
 
 # Get data from parquet file for geographics values
 GEO = "data/itis_geographic.parquet"
 gd = ParquetFile(GEO)
 ll = pd.read_csv("data/lat_long.csv")
+
+with st.sidebar:
+    st.write("data load date: :blue[19-Nov-2024]")
+    st.write("Update 2024-12-10 - :green[Now faster!]")
+    st.write("---")
+    st.write("Stats:")
+    st.write(records)
+    st.write(valids)
+    
 
 ## Search by Common name
 # free search box, return sci and vern names sorted by vern name
