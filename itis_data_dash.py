@@ -3,6 +3,7 @@
 from datetime import datetime
 from fastparquet import ParquetFile
 
+import duckdb as dk
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -38,7 +39,7 @@ def get_data(file) -> pd.DataFrame:
 
 def color_vald(val):
     """Return green color for valid results."""
-    color = "green" if val in {"valid", "accepted"} else ""
+    color = "green" if val in {"valid", "accepted"} else "grey"
     return f"background-color: {color}"
 
 
@@ -65,9 +66,9 @@ def tax_img(tax, frame, col, label):
 
 
 # Create an HTML file with GA tracking code
-with open("google_analytics.html", "r") as f:
-    html_code = f.read()
-components.html(html_code, height=0)
+#with open("google_analytics.html", "r") as f:
+#    html_code = f.read()
+#components.html(html_code, height=0)
 
 # Main app
 st.header("ITIS Taxa Lookup")
@@ -89,63 +90,6 @@ df = get_data(ITIS_SPEC)
 GEO = "data/itis_geographic.parquet"
 gd = ParquetFile(GEO)
 ll = pd.read_csv("data/lat_long.csv")
-
-# Summation charts
-with st.expander("Groupings by Taxa"):
-    c1, c2, c3 = st.columns(3)
-    with c2:
-        tax_img("kingdom", df, "crimson", "Kingdom")
-
-    king_filter = st.selectbox(
-        "Select the Kingdom", pd.unique(df["kingdom"].sort_values())
-    )
-
-    if king_filter:
-        kingf = df[df["kingdom"] == king_filter]
-
-        colf1, colf2 = st.columns(2)
-        colf3, colf4 = st.columns(2)
-
-        with colf1:
-            tax_img("phylum", kingf, "blue", "Phylum")
-            phyl_filter = st.selectbox(
-                "Select the Phylum", pd.unique(kingf["phylum"].sort_values())
-            )
-
-        with colf2:
-            phylf = kingf[kingf["phylum"] == phyl_filter]
-            tax_img("class", phylf, "green", "Class")
-            class_filter = st.selectbox(
-                "Select the Class", pd.unique(phylf["class"].sort_values())
-            )
-
-        with colf3:
-            classf = phylf[phylf["class"] == class_filter]
-            tax_img("order", classf, "orange", "Order")
-            order_filter = st.selectbox(
-                "Select the Order", pd.unique(classf["order"].sort_values())
-            )
-
-        with colf4:
-            orderf = classf[classf["order"] == order_filter]
-            tax_img("family", orderf, "black", "Family")
-            # fig_order = go.Figure()
-            # fig_order.add_trace(
-            #    go.Bar(
-            #        x=orderf["family"].value_counts(),
-            #        y=orderf["family"].value_counts().index,
-            #        marker={"color":"black"},
-            #        orientation="h",
-            #    )
-            # )
-            # fig_order.update_layout(
-            #    title="ITIS TSN by Family",
-            #    yaxis={"autorange":"reversed"},
-            #    xaxis_title="TSN count",
-            #    plot_bgcolor="#dbdbdb",
-            # )
-            # fig_order.update_yaxes(gridcolor="white")
-            # st.plotly_chart(fig_order)
 
 ## Search by Common name
 # free search box, return sci and vern names sorted by vern name
@@ -241,19 +185,28 @@ if species_search:
         st.write("please enter a species")
 
     ## Search by Genus
-    st.markdown("## Genus table")
+    st.markdown("## Genus matches")
     ge_search = genus[0]
-    ge_search = ge_search.title()
-    placeholder = st.empty()
-    search_ge = df[df["unit_name1"] == ge_search]
-    df2 = search_ge.sort_values(by=["complete_name"])
+    query_genus = "select * from  itis where unit_name1 = "
+    query_stmnt = query_genus + "'" + genus[0].title() + "';"
+    conn = dk.connect("data/itis.duckdb")
+    qry = conn.execute(query_stmnt).fetchdf()
+    #st.dataframe(qry)
+    #qry = dk.query(query_stmnt).df()
+    #st.dataframe(qry)
+    #ge_search = ge_search.title()
+    #placeholder = st.empty()
+    #search_ge = df[df["unit_name1"] == ge_search]
+    #df2 = search_ge.sort_values(by=["complete_name"])
+    df2 = qry.sort_values(by=["name_usage","complete_name"], ascending=[False,True])
 
     ## Dataframe based on Genus
     df1 = df2[
         [
             "tsn",
-            "name_usage",
             "complete_name",
+            "name_usage",
+            "unaccept_reason",
             "subfamily",
             "family",
             "superfamily",
