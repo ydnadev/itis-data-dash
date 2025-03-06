@@ -85,7 +85,7 @@ gd = ParquetFile(GEO)
 ll = pd.read_csv("data/lat_long.csv")
 
 with st.sidebar:
-    st.write("data load date: :blue[16-Dec-2024]")
+    st.write("data load date: :blue[20-Feb-2025]")
     st.write("Update 2024-12-10 - :green[Now faster!]")
     st.write("---")
     st.write("Stats:")
