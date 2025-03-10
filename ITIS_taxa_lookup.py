@@ -28,6 +28,7 @@ def convert_df(data):
     """Convert dataframe to CSV."""
     return data.to_csv().encode("utf-8")
 
+@st.cache_data
 def get_data(file) -> pl.DataFrame:
     """Pull data from parquet file."""
     return pl.read_parquet(file)
@@ -77,7 +78,9 @@ cn = get_data(ITS_VERN)
 # Get data from parquet file for species data
 ITIS_SPEC = "data/itis.parquet"
 df = get_data(ITIS_SPEC)
+tsn_count = len(df)
 valid = df.filter(pl.col("name_usage") == "valid")
+valid_count = len(valid)
 
 # Get data from parquet file for geographics values
 GEO = "data/itis_geographic.parquet"
@@ -89,8 +92,10 @@ with st.sidebar:
     st.write("Update 2024-12-10 - :green[Now faster!]")
     st.write("---")
     st.write("Stats:")
-    st.write("811864 TSN records")
-    st.write("500153 valid records")
+    tsn_records = str(tsn_count) + " TSN records"
+    st.write(tsn_records)
+    valid_records = str(valid_count) + " valid records"
+    st.write(valid_records)
     
 
 ## Search by Common name
