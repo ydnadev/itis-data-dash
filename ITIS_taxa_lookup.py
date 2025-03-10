@@ -28,7 +28,7 @@ def convert_df(data):
     """Convert dataframe to CSV."""
     return data.to_csv().encode("utf-8")
 
-@st.cache_data
+#@st.cache_data(ttl=3600)
 def get_data(file) -> pl.DataFrame:
     """Pull data from parquet file."""
     df = pl.read_parquet(file)
