@@ -31,7 +31,8 @@ def convert_df(data):
 @st.cache_data
 def get_data(file) -> pl.DataFrame:
     """Pull data from parquet file."""
-    return pl.read_parquet(file)
+    df = pl.read_parquet(file)
+    return df
 
 def color_vald(val):
     """Return green color for valid results."""
