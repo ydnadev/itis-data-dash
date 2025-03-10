@@ -28,7 +28,6 @@ def convert_df(data):
     """Convert dataframe to CSV."""
     return data.to_csv().encode("utf-8")
 
-@st.cache_data
 def get_data(file) -> pl.DataFrame:
     """Pull data from parquet file."""
     return pl.read_parquet(file)
@@ -75,11 +74,18 @@ st.write("TSN -- Taxonomic Serial Number")
 ITS_VERN = "data/itis_vernacular.parquet"
 cn = get_data(ITS_VERN)
 
+if 'cn' not in st.session_state:
+    st.session_state.cn = cn
+
 # Get data from parquet file for species data
 ITIS_SPEC = "data/itis.parquet"
-df = get_data(ITIS_SPEC)
-tsn_count = len(df)
-valid = df.filter(pl.col("name_usage") == "valid")
+itis_df = get_data(ITIS_SPEC)
+
+if 'itis_df' not in st.session_state:
+    st.session_state.itis_df = itis_df
+
+tsn_count = len(itis_df)
+valid = itis_df.filter(pl.col("name_usage") == "valid")
 valid_count = len(valid)
 
 # Get data from parquet file for geographics values
@@ -144,7 +150,7 @@ else:
 ## search for a match of the species
 try:
     species_search = species_search.upper()
-    search_species_df = df.filter(pl.col("complete_name").str.to_uppercase() == species_search)
+    search_species_df = itis_df.filter(pl.col("complete_name").str.to_uppercase() == species_search)
     search_species = search_species_df.to_pandas()
 
     ## check if the species exists in the dataframe
@@ -207,7 +213,7 @@ except ValueError:
 ## Search by Genus to generate a table of genus level matches
 st.markdown("## Genus matches")
 ge_search = genus.upper()
-ge_df = df.filter(pl.col("unit_name1").str.to_uppercase() == ge_search)
+ge_df = itis_df.filter(pl.col("unit_name1").str.to_uppercase() == ge_search)
 ge_df = ge_df[
         [
             "tsn",

@@ -5,14 +5,14 @@ import polars as pl
 import streamlit as st
 
 
-def color_vald(val):
-    """Return green color for valid results."""
-    color = "green" if val in {"valid", "accepted"} else "grey"
-    return f"background-color: {color}"
+#def color_vald(val):
+#    """Return green color for valid results."""
+#    color = "green" if val in {"valid", "accepted"} else "grey"
+#    return f"background-color: {color}"
 
-def get_data(file) -> pl.DataFrame:
-    """Pull data from parquet file."""
-    return pl.read_parquet(file)
+#def get_data(file) -> pl.DataFrame:
+#    """Pull data from parquet file."""
+#    return pl.read_parquet(file)
 
 
 def tax_img(tax, frame, col, label):
@@ -39,20 +39,25 @@ def tax_img(tax, frame, col, label):
 
 
 # Get data from parquet file for species data
-ITIS_SPEC = "data/itis.parquet"
-df = get_data(ITIS_SPEC)
+#ITIS_SPEC = "data/itis.parquet"
+#df = get_data(ITIS_SPEC)
+
+if 'itis_df' in st.session_state:
+    itis_df = st.session_state.itis_df
+else:
+    st.write("ITIS dataframe not loaded")
 
 c1, c2, c3 = st.columns(3)
 with c2:
-    tax_img("kingdom", df, "crimson", "Kingdom")
+    tax_img("kingdom", itis_df, "crimson", "Kingdom")
 
 king_filter = st.selectbox(
-    "Select the Kingdom", df.get_column("kingdom").unique().sort()
+    "Select the Kingdom", itis_df.get_column("kingdom").unique().sort()
 )
 
 if king_filter:
 
-    kingf = df.filter(pl.col("kingdom") == king_filter)
+    kingf = itis_df.filter(pl.col("kingdom") == king_filter)
 
     colf1, colf2 = st.columns(2)
     colf3, colf4 = st.columns(2)
