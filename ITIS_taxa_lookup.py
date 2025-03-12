@@ -93,7 +93,9 @@ valid_count = len(valid)
 # Get data from parquet file for geographics values
 GEO = "data/itis_geographic.parquet"
 gd = ParquetFile(GEO)
-ll = pd.read_csv("data/lat_long.csv")
+gd2 = get_data(GEO)
+#ll = pd.read_csv("data/lat_long.csv")
+ll = pl.read_csv("data/lat_long.csv")
 
 with st.sidebar:
     st.write("data load date: :blue[20-Feb-2025]")
@@ -196,10 +198,18 @@ try:
             st.write(search_species["name_usage"].values[0] + " -- " + itis_link)
             val1 = search_species["tsn"].values[0]
             gdf = gd.to_pandas(filters=(("tsn", "==", val1),))
-            sp_dist = gdf[gdf["tsn"] == val1]
-            if not sp_dist.empty:
-                sp_dist_ll = sp_dist.merge(
-                    ll, left_on="geographic_value", right_on="geographic_value"
+            #sp_dist = gdf[gdf["tsn"] == val1]
+            sp_dist = gd2.filter(pl.col("tsn") == val1)
+
+            #if not sp_dist.empty:
+            if not sp_dist.is_empty():
+                #sp_dist_ll = sp_dist.merge(
+                #    ll, left_on="geographic_value", right_on="geographic_value"
+                #)
+                sp_dist_ll = sp_dist.join(
+                    ll,
+                    on="geographic_value",
+                    how="inner"
                 )
                 datamap = px.scatter_geo(
                     sp_dist_ll,
