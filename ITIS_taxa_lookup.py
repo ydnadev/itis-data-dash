@@ -98,7 +98,7 @@ gd2 = get_data(GEO)
 ll = pl.read_csv("data/lat_long.csv")
 
 with st.sidebar:
-    st.write("data load date: :blue[31-Mar-2025]")
+    st.write("data load date: :blue[25-Apr-2025]")
     st.write("Update 2024-12-10 - :green[Now faster!]")
     st.write("---")
     st.write("Stats:")
